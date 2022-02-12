@@ -25,7 +25,10 @@ RUN python3 -m venv env
 
 # copy and install pip requirements
 COPY --chown=myproject ./src/myproject/requirements /home/myproject/requirements/
-RUN ./env/bin/pip3 install -r /home/myproject/requirements/${PIP_REQUIREMENTS}
+#RUN ./env/bin/pip3 install -r /home/myproject/requirements/${PIP_REQUIREMENTS}
+RUN ./env/bin/pip3 install -r /home/myproject/requirements/dev.txt
 
 # copy Django project files
 COPY --chown=myproject ./src/myproject /home/myproject/
+COPY ./init-user-db.sh /docker-entrypoint-initdb.d/
+COPY ./django-entrypoint.sh /home/myproject/

@@ -1,5 +1,5 @@
 version: "3.7"
-
+#container_name: docker_cookbook
 services:
   nginx:
     image: nginx:latest
@@ -17,7 +17,8 @@ services:
       context: .
       args:
         PIP_REQUIREMENTS: "${PIP_REQUIREMENTS}"
-    command: bash -c "/home/myproject/env/bin/gunicorn --workers 3 --bind 0.0.0.0:8000 myproject.wsgi:application"
+    #command: bash -c "/home/myproject/env/bin/gunicorn --workers 3 --bind 0.0.0.0:8000 myproject.wsgi:application"
+    command: bash -c "/home/myproject/django-entrypoint.sh"
     depends_on:
       - db
     volumes:
@@ -38,13 +39,15 @@ services:
 
   db:
     image: postgres:latest
-    restart: always
+    restart: always 
     environment:
       POSTGRES_DB: "${DATABASE_NAME}"
       POSTGRES_USER: "${DATABASE_USER}"
       POSTGRES_PASSWORD: "${DATABASE_PASSWORD}"
     ports:
-      - 5432
+      - "5438:5432"
+    #expose:
+    #  - 5438
     volumes:
       - postgres_data:/var/lib/postgresql/data/
 
